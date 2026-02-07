@@ -3511,15 +3511,16 @@ def main():
                 wrong_answer_models = []  # 오답 모델 추적
                 
                 for model, answer in selected.items():
+                    # 해당 모델의 정답여부를 직접 참조
+                    model_row = q_df[q_df['모델'] == model]
+                    is_correct = model_row['정답여부'].values[0] if len(model_row) > 0 else False
+                    
                     if pd.isna(answer):
                         nan_count += 1
                     elif str(answer).strip() == '':
                         empty_count += 1
-                    elif str(answer) != str(correct):
-                        # 정답이 아니면 오답
+                    elif not is_correct:                    # ✅ 정답여부 기준
                         wrong_answers.append(str(answer).strip())
-                        wrong_answer_models.append(model)
-                        valid_answers += 1
                     else:
                         valid_answers += 1
                 
